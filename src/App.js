@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import Form from './Form'
 import schema from './formSchema'
@@ -20,12 +20,14 @@ const defaultFormErrors = {
 }
 
 const initialUsers = []
+const initialDisabled = true
 
 function App() {
 
   const [ formValues, setFormValues ] = useState(defaultFormValues)
   const [ users, setUsers ] = useState(initialUsers)
   const [ formErrors, setFormErrors] = useState(defaultFormErrors)
+  const [ disabled, setDisabled] = useState(initialDisabled)
 
   const onSubmit = function(event){
     event.preventDefault()
@@ -59,12 +61,28 @@ function App() {
     setFormValues({...formValues, [inputName]: inputValue})
   }
 
+  // schema.isValid(formValues)
+  //     .then(valid => {
+  //       setDisabled(!valid)
+  //     })
+  // }, [formValues])
+  useEffect(() => {
+    schema.isValid(formValues)
+    .then(valid => {
+      setDisabled(!valid)
+    })
+  }, [formValues])
+  
+
+
+
+
   // Once the users hits submit, if the current form values are accepted, formValues slice of state will be set to defaultFormValues
   // setFormValues(defaultFormValues)
 
   return (
     <div className="App">
-      <Form formValues={formValues} inputChange={inputChange} onSubmit={onSubmit}/>
+      <Form formValues={formValues} inputChange={inputChange} onSubmit={onSubmit} disabled={disabled} />
       <p>{formErrors.name}</p>
       <p>{formErrors.email}</p>
       <p>{formErrors.password}</p>

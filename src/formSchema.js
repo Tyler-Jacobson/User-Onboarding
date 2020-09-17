@@ -10,6 +10,5 @@ export default yup.object().shape({
     password: yup.string()
         .required('Password is required')
         .min(5, 'Minimum length is 5'),
-    checkbox: yup.boolean()
-        .required('You must accept the terms of service')
+    checkbox: yup.boolean().oneOf([true], 'You must accept the terms of service')
 })
