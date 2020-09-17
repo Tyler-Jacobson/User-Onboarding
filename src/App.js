@@ -4,6 +4,7 @@ import './App.css';
 import Form from './Form'
 import schema from './formSchema'
 import * as yup from 'yup'
+import User from './User'
 
 const defaultFormValues = {
   name: "",
@@ -34,7 +35,11 @@ function App() {
 
     axios.post('https://reqres.in/api/users', formValues)
     .then(res=> {
+      console.log(res.data)
       setUsers([...users, res.data])
+      users.map(user=> {
+        console.log(user)
+      })
     })
     .catch(err => {
       console.log(err)
@@ -61,11 +66,6 @@ function App() {
     setFormValues({...formValues, [inputName]: inputValue})
   }
 
-  // schema.isValid(formValues)
-  //     .then(valid => {
-  //       setDisabled(!valid)
-  //     })
-  // }, [formValues])
   useEffect(() => {
     schema.isValid(formValues)
     .then(valid => {
@@ -73,9 +73,6 @@ function App() {
     })
   }, [formValues])
   
-
-
-
 
   // Once the users hits submit, if the current form values are accepted, formValues slice of state will be set to defaultFormValues
   // setFormValues(defaultFormValues)
@@ -87,6 +84,11 @@ function App() {
       <p>{formErrors.email}</p>
       <p>{formErrors.password}</p>
       <p>{formErrors.checkbox}</p>
+      {
+        users.map(user =>{
+          return <User key={user.id} user={user} />
+        })
+      }
     </div>
   );
 }
